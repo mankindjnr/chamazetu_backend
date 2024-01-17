@@ -24,16 +24,10 @@ async def create_access_token(data: dict):
 async def verify_access_token(token: str, credentials_exception):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        print("---------payload---------")
-        print(payload)
-        print("------------------")
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
         token_data = schemas.TokenData(username=username)
-        print("---------token_data---------")
-        print(token_data)
-        print("------------------")
         return token_data
     except JWTError:
         raise credentials_exception
@@ -45,9 +39,6 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
         headers={"WWW-Authenticate": "Bearer"}
     )
     token = await verify_access_token(token, credentials_exception)
-    print("----------hhgghgh--------")
-    print(token)
-    print("------------------")
     user = db.query(models.User).filter(models.User.email == token.username).first()
     if user is None:
         raise credentials_exception

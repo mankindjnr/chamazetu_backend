@@ -19,3 +19,7 @@ def create_user(user: schemas.UserBase, db: Session = Depends(get_db)):
     db.refresh(new_user)
     return {"User": [{"email": new_user.email, "created_at": new_user.created_at}]}
 
+@router.get("/me")
+async def get_user(current_user: models.User = Depends(oauth2.get_current_user), db: Session = Depends(get_db)):
+    return {"email": current_user.email}
+
