@@ -2,6 +2,7 @@ from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional, List
 from pydantic.types import conint
+from decouple import config
 
 # ============== user =================
 class UserBase(BaseModel):
@@ -24,6 +25,7 @@ class UserLogin(BaseModel):
         orm_mode = True
         from_attributes = True
 
+
 class Response(BaseModel):
     email: EmailStr
     created_at: datetime
@@ -37,6 +39,7 @@ class UserResp(BaseModel):
 # ====================  Token  ====================
 class Token(BaseModel):
     access_token: str
+    refresh_token: str
     token_type: str
 
 class TokenData(BaseModel):
