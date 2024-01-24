@@ -1,7 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Response
+from fastapi import APIRouter, Depends, HTTPException, status, Response, Body
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
+import logging
 
 from .. import schemas, database, utils, oauth2, models
 
@@ -21,8 +22,18 @@ async def login(user_credentials: OAuth2PasswordRequestForm = Depends(), db: Ses
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Invalid Credentials")
 
     access_token = await oauth2.create_access_token(data={"sub": user.email})
+    refresh_token = await oauth2.create_refresh_token(data={"sub": user.email})
     
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
+
+@router.post("/refresh", response_model=schemas.refreshedToken)
+async def new_access_token(token_data: schemas.TokenData = Body(...)):
+    try:
+        logging.info(f"token_data: {token_data}")
+        new_access_token = await oauth2.create_access_token(data={"sub": token_data.username})
+        return {"new_access_token": new_access_token, "refreshed_token_type": "bearer"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 # this is for logout, currently not working but everything else is working

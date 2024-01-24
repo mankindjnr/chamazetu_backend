@@ -42,5 +42,9 @@ class Token(BaseModel):
     refresh_token: str
     token_type: str
 
+class refreshedToken(BaseModel):
+    new_access_token: str
+    refreshed_token_type: str
+
 class TokenData(BaseModel):
-    username: Optional[str] = None
+    username: str
