@@ -9,7 +9,8 @@ class UserBase(BaseModel):
     email: EmailStr
     password: str
     is_active: bool # account is active or not
-    is_superuser: bool
+    is_manager: bool
+    is_member: bool
     is_staff: bool
     is_verified: bool # email verification
 
