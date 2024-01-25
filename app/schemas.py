@@ -7,6 +7,7 @@ from decouple import config
 # ============== user =================
 class UserBase(BaseModel):
     email: EmailStr
+    username: str
     password: str
     is_active: bool # account is active or not
     is_manager: bool
@@ -28,7 +29,9 @@ class UserLogin(BaseModel):
 
 
 class Response(BaseModel):
+    id: int
     email: EmailStr
+    activation_code: str
     created_at: datetime
 
 class UserResp(BaseModel):

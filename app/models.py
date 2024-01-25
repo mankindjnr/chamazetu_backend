@@ -8,7 +8,8 @@ class User(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
-    email = Column(String(100), nullable=False, unique=True)
+    email = Column(String(100), nullable=False, unique=True, index=True)
+    username = Column(String(100), nullable=False)
     password = Column(String(250), nullable=False)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
